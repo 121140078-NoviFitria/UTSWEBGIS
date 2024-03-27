@@ -1,0 +1,61 @@
+.navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Menggunakan flexbox */
+    justify-content: flex-start; /* Menyusun item ke kiri */
+}
+
+.navigation li {
+    margin-right: 10px; /* Jarak antar item */
+    margin-bottom: 10px;
+}
+
+.navigation input[type="checkbox"] {
+    display: none;
+}
+
+.navigation label {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.navigation input[type="checkbox"]:checked + label {
+    background-color: #007bff;
+    color: white;
+}
+
+.tmenu{
+    position : absolute;
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #007bff;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    top:162px;
+    left:445px;
+    width:100px;
+}
+
+.tmenu:active {
+    background-color: #007bff; /* Warna latar belakang saat diklik */
+}
+
+.submenu{
+    position:absolute;
+    transition: all 0.3s ease-in-out;
+    padding:10px;
+    gap:10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px; /* Border radius untuk sudut submenu */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Efek bayangan untuk submenu */
+    top:190px;
+    left:445px;
+    width:200px;
+    background:#007bff;
+    label:hover { color: #ffffff; /* Warna teks label saat dihover */  }
+}

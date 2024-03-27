@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/ol@v9.1.0/dist/ol.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v9.1.0/ol.css">
+  <script type="text/javascript" src="../jquery/jquery-3.7.1.min.js"> </script>
+  <link rel="stylesheet" href="script/style.css">
+  <link rel="icon" href="gambar/logo.png">
+  <title>UTS WEBGIS NOVI</title>
+
+  <script>$(document).ready(function () {
+      $('.submenu').hide();
+      $('.tmenu').click(function () {
+        $('.submenu').slideToggle()
+      });
+    });
+  </script>
+
+</head>
+
+<body>
+  <center>
+    <h1> PETA ADMINISTRASI KECAMATAN LAMPUNG TIMUR </h1>
+    <h3> Ujian Tengah Semester Sistem Informasi Geografis</h3>
+    <h4> Novi Fitria Ramadhan (121140078) </h4>
+  </center>
+
+  <div class="navigation">
+    <ul>
+      <li>
+        <input class="tjalan" type="checkbox" id="jalan" checked>
+        <label for="jalan">Jaringan Jalan</label>
+      </li>
+      <li>
+        <input class="tkecamatan" type="checkbox" id="kecamatan" checked>
+        <label for="kecamatan"> Administrasi Kecamatan</label>
+      </li>
+      <li>
+        <input class="tcagarbudaya" type="checkbox" id="cagarbudaya" checked>
+        <label for="cagarbudaya">Cagar Budaya</label>
+      </li>
+    </ul>
+  </div>
+
+  <div id="peta" class="peta" style="height:68vh; width:100%; background-color: #6495Ed;"> </div>
+  <div id="posisi_koordinat"></div>
+
+  <div class="tmenu"> <label style="cursor:pointer"> Kecamatan </label></div>
+  <div class="submenu">
+    <div> <label style="cursor:pointer" onclick="geserview(105.66435508882573,-5.26172365952105)"> BANDAR SRIBHAWONO
+      </label></div>
+    <div> <label style="cursor:pointer" onclick="geserview(105.76103662901032,-5.187049995233388 )"> BRAJA SELEBAH
+      </label></div>
+    <div> <label style="cursor:pointer" onclick="geserview(105.5569298984694, -5.2964075606328285)"> SEKAMPUNG UDIK
+      </label></div>
+    <div> <label style="cursor:pointer" onclick="geserview(105.75552502665266, -5.403838696379565)"> GUNUNG PELINDUNG
+      </label></div>
+    <div> <label style="cursor:pointer" onclick="geserview(105.55595949740045,-5.045162823656957)"> SUKADANA </label>
+    </div>
+    <div> <label style="cursor:pointer" onclick="geserview(105.37376715815611,-5.056632181464823)"> PEKALONGAN </label>
+    </div>
+    <div> <label style="cursor:pointer" onclick="geserview(105.75019443664371,-5.358901042800117)"> MELINTING </label>
+    </div>
+    <div> <label style="cursor:pointer" onclick="geserview(105.80346427319884, -5.325283011176748)"> LABUHAN MARINGGAI
+      </label></div>
+    <div> <label style="cursor:pointer" onclick="geserview(105.43770850109485,-5.150599160195189)"> SEKAMPUNG </label>
+    </div>
+    <div> <label style="cursor:pointer" onclick="geserview(105.36717478359867,-5.141148046506893)"> BATANGHARI </label>
+    </div>
+    <div> <label style="cursor:pointer" onclick="geserview(105.70511699731614,-5.505962011871333)"> JABUNG </label>
+    </div>
+    <div> <label style="cursor:pointer" onclick="geserview(105.69545252981271,-5.191680551369812)"> WAY JEPARA </label>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+
+    $('.tjalan').change(function () {
+      if ($(this).is(':checked')) { jalanLayer.setVisible(true) }
+      else { jalanLayer.setVisible(false); }
+    });
+
+    $('.tkecamatan').change(function () {
+      if ($(this).is(':checked')) { kecamatanLayer.setVisible(true) }
+      else { kecamatanLayer.setVisible(false); }
+    });
+
+    $('.tcagarbudaya').change(function () {
+      if ($(this).is(':checked')) { cagarBudayaLayer.setVisible(true) }
+      else { cagarBudayaLayer.setVisible(false); }
+    });
+
+    var myosm = new ol.layer.Tile({
+      source: new ol.source.OSM()
+    });
+
+    var myview = new ol.View({
+      center: ol.proj.fromLonLat([105.60791716257829, -5.297949543424862]),
+      zoom: 10
+    });
+
+    var mylayer = [myosm];
+
+    var mymap = new ol.Map({
+      target: 'peta',
+      layers: mylayer,
+      view: myview,
+    });
+
+    // Membuat kontrol MousePosition
+    var mousePositionControl = new ol.control.MousePosition({
+      coordinateFormat: ol.coordinate.createStringXY(7),
+      projection: 'EPSG:4326',
+      target: document.getElementById("posisi_koordinat"),
+      className: 'custom-mouse-position'
+    });
+
+    // Menambahkan kontrol MousePosition ke peta
+    mymap.addControl(mousePositionControl);
+
+    // Membuat GeoJSON layer
+    var jalanLayer = new ol.layer.Vector({
+      source: new ol.source.Vector({
+        url: 'peta/jalan.geojson',
+        format: new ol.format.GeoJSON()
+      })
+    });
+
+    // Menambahkan GeoJSON layer ke peta
+    mymap.addLayer(jalanLayer);
+
+    // Membuat GeoJSON layer untuk peta administrasi
+    var kecamatanLayer = new ol.layer.Vector({
+      source: new ol.source.Vector({
+        url: 'peta/administrasi_kecamatan.geojson',
+        format: new ol.format.GeoJSON()
+      }),
+      style: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'rgba(0, 0, 255, 1.0)',
+          width: 2
+        })
+      })
+    });
+
+    // Menambahkan GeoJSON layer peta administrasi ke peta
+    mymap.addLayer(kecamatanLayer);
+
+    var cagarBudayaLayer = new ol.layer.Vector({
+      source: new ol.source.Vector({
+        url: 'peta/cagar_budaya.geojson',
+        format: new ol.format.GeoJSON()
+      }),
+      style: function (feature) {
+        return new ol.style.Style({
+          image: new ol.style.Icon({
+            src: 'gambar/icon.png',
+            scale: 0.5 // Skala gambar
+          })
+        });
+      }
+    });
+
+    // Menambahkan GeoJSON layer peta titik cagar budaya ke peta
+    mymap.addLayer(cagarBudayaLayer);
+
+    function geserview(x, y) {
+      var lokasi_tujuan = ol.proj.fromLonLat([x, y]);
+      myview.animate(
+        {
+          center: lokasi_tujuan,
+          zoom: 13,
+          duration: 2000
+        }
+      )
+    }
+
+  </script>
+
+</body>
+
+</html>
